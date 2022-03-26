@@ -1,8 +1,7 @@
 # OpenApi2JsonSchema
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/open_api_2_json_schema`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This is a simplified ruby port of [Javascript library
+openapi-schema-to-json-schema](https://github.com/openapi-contrib/openapi-schema-to-json-schema)
 
 ## Installation
 
@@ -22,7 +21,18 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+# if you want to convert from file
+OpenApi2JsonSchema.convert_from_file("path/to/open_api.yml")
+
+# if you want to convert from stringify hash
+schema = {
+  'type' => 'string',
+  'format' => 'date-time',
+  'nullable' => true
+}
+OpenApi2JsonSchema.convert(schema)
+```
 
 ## Development
 
@@ -32,7 +42,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/open_api_2_json_schema.
+Bug reports and pull requests are welcome on GitHub at https://github.com/hieuk09/open_api_2_json_schema.
 
 ## License
 
