@@ -5,7 +5,33 @@ RSpec.describe OpenApi2JsonSchema do
     expect(OpenApi2JsonSchema::VERSION).not_to be nil
   end
 
-  it "does something useful" do
-    expect(false).to eq(true)
+  describe '.convert_from_file' do
+    let(:path) { 'spec/fixtures/open_api.yml' }
+    subject { described_class.convert_from_file(path) }
+
+    it 'converts data correctly' do
+      expected_data = JSON.parse(File.read('spec/fixtures/json_schema.json'))
+      expect(JSON.parse(subject)).to eq expected_data
+    end
+  end
+
+  describe '.convert' do
+    let(:schema) do
+      {
+        'type' => 'string',
+        'format' => 'date-time',
+        'nullable' => true
+      }
+    end
+    let(:expected_data) do
+      {
+        'type' => ['string', 'null'],
+        'format' => 'date-time',
+        '$schema' => 'http://json-schema.org/draft-04/schema#'
+      }.to_json
+    end
+    subject { described_class.convert(schema) }
+
+    it { is_expected.to eq expected_data }
   end
 end

@@ -1,0 +1,565 @@
+schema:
+  type: object
+  required:
+    - production
+    - env
+    - captcha
+    - prismic
+    - config
+  properties:
+    fence:
+      type: integer
+    production:
+      type: boolean
+    env:
+      type: string
+      enum:
+        - production
+        - staging
+        - local
+    developmentApiUrl:
+      type: string
+    captcha:
+      type: object
+      required:
+        - v2Key
+        - v3Key
+        - nonce
+      properties:
+        v2Key:
+          type: string
+        v3Key:
+          type: string
+        nonce:
+          type: string
+    prismic:
+      type: object
+      required:
+        - apiUrl
+        - accessToken
+      properties:
+        apiUrl:
+          type: string
+        accessToken:
+          type: string
+    secureFields:
+      type: object
+      required:
+        - clientIds
+        - format
+      properties:
+        validation:
+          type: object
+          properties:
+            validPatterns:
+              type: string
+        clientIds:
+          type: object
+          properties: {}
+        format:
+          type: string
+    config:
+      type: object
+      required:
+        - partner
+        - noticePosition
+        - dateFieldMask
+        - defaultLocale
+        - deviceHistory
+        - enrollUser
+        - identityCreate
+        - identityRemove
+        - identityVerificationEmailSend
+        - identityVerify
+        - login
+        - otpInput
+        - passwordPolicies
+        - passwordEdit
+        - passwordForgot
+        - passwordReset
+        - passwordRulesOrder
+        - profile
+        - redirectToLoginIfAlreadyActivated
+        - registerEmailIdentity
+        - registerSmsIdentity
+        - retrieveUsername
+        - showRestrictedErrorInModal
+        - stepUpIdentity
+        - usernameEdit
+        - unverified
+      properties:
+        partner:
+          type: string
+        noticePosition:
+          type: string
+          enum:
+            - top
+            - bottom
+        defaultAuthProvider:
+          type: string
+        dateFieldMask:
+          type: string
+        defaultLocale:
+          type: string
+        deviceHistory:
+          type: object
+          required:
+            - enabled
+            - stepUp
+          properties:
+            headerTitle:
+              type: string
+            secondaryHeaderLink:
+              type: string
+              enum:
+                - go-back
+                - go-back-identities
+                - go-back-login
+                - login
+                - my-profile
+                - register
+            enabled:
+              type: boolean
+            stepUp:
+              type: boolean
+        enrollUser:
+          type: object
+          required:
+            - enabled
+            - stepUp
+          properties:
+            headerTitle:
+              type: string
+            secondaryHeaderLink:
+              type: string
+              enum:
+                - go-back
+                - go-back-identities
+                - go-back-login
+                - login
+                - my-profile
+                - register
+            enabled:
+              type: boolean
+            stepUp:
+              type: boolean
+        identityCreate:
+          type: object
+          required:
+            - enabled
+            - stepUp
+          properties:
+            headerTitle:
+              type: string
+            secondaryHeaderLink:
+              type: string
+              enum:
+                - go-back
+                - go-back-identities
+                - go-back-login
+                - login
+                - my-profile
+                - register
+            enabled:
+              type: boolean
+            stepUp:
+              type: boolean
+        identityRemove:
+          type: object
+          required:
+            - enabled
+            - stepUp
+          properties:
+            headerTitle:
+              type: string
+            secondaryHeaderLink:
+              type: string
+              enum:
+                - go-back
+                - go-back-identities
+                - go-back-login
+                - login
+                - my-profile
+                - register
+            enabled:
+              type: boolean
+            stepUp:
+              type: boolean
+        identityVerificationEmailSend:
+          type: object
+          required:
+            - enabled
+            - stepUp
+          properties:
+            headerTitle:
+              type: string
+            secondaryHeaderLink:
+              type: string
+              enum:
+                - go-back
+                - go-back-identities
+                - go-back-login
+                - login
+                - my-profile
+                - register
+            enabled:
+              type: boolean
+            stepUp:
+              type: boolean
+        identityVerify:
+          type: object
+          required:
+            - enabled
+            - stepUp
+          properties:
+            headerTitle:
+              type: string
+            secondaryHeaderLink:
+              type: string
+              enum:
+                - go-back
+                - go-back-identities
+                - go-back-login
+                - login
+                - my-profile
+                - register
+            enabled:
+              type: boolean
+            stepUp:
+              type: boolean
+        login:
+          type: object
+          required:
+            - enabled
+            - stepUp
+          properties:
+            headerTitle:
+              type: string
+            secondaryHeaderLink:
+              type: string
+              enum:
+                - go-back
+                - go-back-identities
+                - go-back-login
+                - login
+                - my-profile
+                - register
+            enabled:
+              type: boolean
+            stepUp:
+              type: boolean
+        otpInput:
+          type: object
+          properties:
+            allowNumbersOnly:
+              type: boolean
+            length:
+              type: integer
+            disableAutoFocus:
+              type: boolean
+            inputStyles:
+              type: object
+              properties: {}
+            containerStyles:
+              type: object
+              properties: {}
+        passwordPolicies:
+          type: object
+          required:
+            - reveal
+          properties:
+            reveal:
+              type: string
+        passwordEdit:
+          type: object
+          required:
+            - enabled
+            - stepUp
+          properties:
+            headerTitle:
+              type: string
+            secondaryHeaderLink:
+              type: string
+              enum:
+                - go-back
+                - go-back-identities
+                - go-back-login
+                - login
+                - my-profile
+                - register
+            enabled:
+              type: boolean
+            stepUp:
+              type: boolean
+        passwordForgot:
+          type: object
+          required:
+            - enabled
+            - stepUp
+          properties:
+            headerTitle:
+              type: string
+            secondaryHeaderLink:
+              type: string
+              enum:
+                - go-back
+                - go-back-identities
+                - go-back-login
+                - login
+                - my-profile
+                - register
+            enabled:
+              type: boolean
+            stepUp:
+              type: boolean
+        passwordReset:
+          type: object
+          required:
+            - enabled
+            - stepUp
+          properties:
+            headerTitle:
+              type: string
+            secondaryHeaderLink:
+              type: string
+              enum:
+                - go-back
+                - go-back-identities
+                - go-back-login
+                - login
+                - my-profile
+                - register
+            enabled:
+              type: boolean
+            stepUp:
+              type: boolean
+        passwordRulesOrder:
+          type: object
+          required:
+            - length
+            - uppercase
+            - lowercase
+            - digit
+            - special_character
+            - user_identifier
+            - partial_match
+            - exact_match
+          properties:
+            length:
+              type: integer
+            uppercase:
+              type: integer
+            lowercase:
+              type: integer
+            digit:
+              type: integer
+            special_character:
+              type: integer
+            user_identifier:
+              type: integer
+            partial_match:
+              type: integer
+            exact_match:
+              type: integer
+        profile:
+          type: object
+          required:
+            - enabled
+            - stepUp
+          properties:
+            headerTitle:
+              type: string
+            secondaryHeaderLink:
+              type: string
+              enum:
+                - go-back
+                - go-back-identities
+                - go-back-login
+                - login
+                - my-profile
+                - register
+            enabled:
+              type: boolean
+            stepUp:
+              type: boolean
+            addEmailIcon:
+              type: string
+            addMobileIcon:
+              type: string
+            changeIcon:
+              type: string
+            removeIcon:
+              type: string
+            rightArrowIcon:
+              type: string
+            unverifyIcon:
+              type: string
+            deviceSessionsEnabled:
+              type: boolean
+            manageIdentitiesEnabled:
+              type: boolean
+            showProfileViewCardsLink:
+              type: boolean
+        redirectOnVerificationFail:
+          type: string
+        redirectToLoginIfAlreadyActivated:
+          type: boolean
+        registerEmailIdentity:
+          type: object
+          required:
+            - enabled
+            - stepUp
+          properties:
+            headerTitle:
+              type: string
+            secondaryHeaderLink:
+              type: string
+              enum:
+                - go-back
+                - go-back-identities
+                - go-back-login
+                - login
+                - my-profile
+                - register
+            enabled:
+              type: boolean
+            stepUp:
+              type: boolean
+        registerSmsIdentity:
+          type: object
+          required:
+            - enabled
+            - stepUp
+          properties:
+            headerTitle:
+              type: string
+            secondaryHeaderLink:
+              type: string
+              enum:
+                - go-back
+                - go-back-identities
+                - go-back-login
+                - login
+                - my-profile
+                - register
+            enabled:
+              type: boolean
+            stepUp:
+              type: boolean
+        retrieveUsername:
+          type: object
+          required:
+            - type
+            - enabled
+            - stepUp
+          properties:
+            type:
+              type: string
+              enum:
+                - single
+                - multiple
+            headerTitle:
+              type: string
+            secondaryHeaderLink:
+              type: string
+              enum:
+                - go-back
+                - go-back-identities
+                - go-back-login
+                - login
+                - my-profile
+                - register
+            enabled:
+              type: boolean
+            stepUp:
+              type: boolean
+        showSuccessInDialog:
+          type: boolean
+        showRestrictedErrorInModal:
+          type: boolean
+        stepUpIdentity:
+          type: object
+          required:
+            - enabled
+            - stepUp
+          properties:
+            headerTitle:
+              type: string
+            secondaryHeaderLink:
+              type: string
+              enum:
+                - go-back
+                - go-back-identities
+                - go-back-login
+                - login
+                - my-profile
+                - register
+            enabled:
+              type: boolean
+            stepUp:
+              type: boolean
+        usernameEdit:
+          type: object
+          required:
+            - enabled
+            - stepUp
+          properties:
+            headerTitle:
+              type: string
+            secondaryHeaderLink:
+              type: string
+              enum:
+                - go-back
+                - go-back-identities
+                - go-back-login
+                - login
+                - my-profile
+                - register
+            enabled:
+              type: boolean
+            stepUp:
+              type: boolean
+        unverified:
+          type: object
+          required:
+            - enabled
+            - stepUp
+          properties:
+            headerTitle:
+              type: string
+            secondaryHeaderLink:
+              type: string
+              enum:
+                - go-back
+                - go-back-identities
+                - go-back-login
+                - login
+                - my-profile
+                - register
+            enabled:
+              type: boolean
+            stepUp:
+              type: boolean
+        failure:
+          type: object
+          properties:
+            alwaysShowErrorDetails:
+              type: boolean
+            showLoginButton:
+              type: boolean
+            validateSessionExpiredCode:
+              type: boolean
+            showHttCodeAsTitle:
+              type: boolean
+            showSubTitle:
+              type: boolean
+            alwaysHideCodeContent:
+              type: boolean
+            subTitleTranslationKey:
+              type: string
+            preTitleTranslationKey:
+              type: string
+            closingMessageTranslationKey:
+              type: string
+            icon:
+              type: string
