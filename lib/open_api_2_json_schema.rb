@@ -1,32 +1,34 @@
 # frozen_string_literal: true
 
-require 'json'
-require 'yaml'
+require "json"
+require "yaml"
 require_relative "open_api_2_json_schema/version"
+require_relative "utils/hash"
 
 module OpenApi2JsonSchema
   module_function
 
-  STRUCTS = ['allOf', 'anyOf', 'oneOf', 'not', 'items', 'additionalProperties']
-  NOT_SUPPORTED = [
-    'nullable', 'discriminator', 'readOnly',
-    'writeOnly', 'xml', 'externalDocs',
-    'example', 'deprecated'
-  ]
-  VALID_TYPES = ['integer', 'number', 'string', 'boolean', 'object', 'array', 'null']
-  VALID_FORMATS = ['date-time', 'email', 'hostname', 'ipv4', 'ipv6', 'uri', 'uri-reference']
+  STRUCTS = %w[allOf anyOf oneOf not items additionalProperties schema].freeze
+  NOT_SUPPORTED = %w[
+    nullable discriminator readOnly
+    writeOnly xml externalDocs
+    example deprecated
+  ].freeze
+  VALID_TYPES = %w[integer number string boolean object array null].freeze
+  VALID_FORMATS = %w[date-time email hostname ipv4 ipv6 uri uri-reference].freeze
 
-  MIN_INT_32 = 0 - 2 ** 31
-  MAX_INT_32 = 2 ** 31 - 1
-  MIN_INT_64 = 0 - 2 ** 63
-  MAX_INT_64 = 2 ** 63 - 1
-  MIN_FLOAT = 0 - 2 ** 128
-  MAX_FLOAT = 2 ** 128 - 1
+  MIN_INT_32 = 0 - 2**31
+  MAX_INT_32 = 2**31 - 1
+  MIN_INT_64 = 0 - 2**63
+  MAX_INT_64 = 2**63 - 1
+  MIN_FLOAT = 0 - 2**128
+  MAX_FLOAT = 2**128 - 1
   MAX_DOUBLE = 1.7976931348623157e+308
   MIN_DOUBLE = 0 - MAX_DOUBLE
   BYTE_PATTERN = '^[\\w\\d+\\/=]*$'
 
   class Error < StandardError; end
+
   class InvalidTypeError < Error
     def self.build(type)
       new("Type #{type} is not a valid type")
@@ -35,43 +37,51 @@ module OpenApi2JsonSchema
 
   def convert_from_file(path)
     data = File.read(path)
-    convert(YAML.load(data))
+    convert(YAML.safe_load(data))
   end
 
   def convert(schema)
     convert_schema(schema).tap do |json_schema|
-      json_schema['$schema'] = 'http://json-schema.org/draft-04/schema#'
+      json_schema["$schema"] = "http://json-schema.org/draft-04/schema#"
     end.to_json
   end
 
   def convert_schema(schema)
     json_schema = schema.except(*NOT_SUPPORTED)
 
-    schema.slice(STRUCTS).each do |struct, data|
+    schema.slice(*STRUCTS).each do |struct, data|
       case data
       when Array
         json_schema[struct] = data.map do |item|
           convert_schema(item)
         end
       when Hash
-        json_schema[struct] = convert_schema(data)
+        if struct == 'allOf' && data['$ref']
+          base_schema = JSON.parse(convert_from_file(data['$ref']))
+          base_schema = base_schema['schema'] if base_schema['schema']
+          child_schema = convert_schema(data.except('$ref'))
+          sanitized_schema = ::Utils::Hash.deep_merge(base_schema, child_schema)
+          json_schema = json_schema.except(struct).merge(sanitized_schema)
+        else
+          json_schema[struct] = convert_schema(data)
+        end
       else
         # ignore
       end
     end
 
-    if schema.key?('properties')
-      new_properties = convert_properties(schema['properties'])
+    if schema.key?("properties")
+      new_properties = convert_properties(schema["properties"])
 
-      if schema['required'].is_a?(Array)
-        new_required = clean_required(schema['required'], schema['properties'])
-        json_schema['required'] = new_required if new_required.any?
+      if schema["required"].is_a?(Array)
+        new_required = clean_required(schema["required"], schema["properties"])
+        json_schema["required"] = new_required if new_required.any?
       end
 
-      json_schema['properties'] = new_properties if new_properties.any?
+      json_schema["properties"] = new_properties if new_properties.any?
     end
 
-    validate_type(schema['type'])
+    validate_type(schema["type"])
 
     json_schema.merge!(convert_types(schema))
     json_schema.merge!(convert_format(schema))
@@ -80,9 +90,7 @@ module OpenApi2JsonSchema
   end
 
   def validate_type(type)
-    unless type.nil? || VALID_TYPES.include?(type)
-      raise InvalidTypeError.build(type)
-    end
+    raise InvalidTypeError.build(type) unless type.nil? || VALID_TYPES.include?(type)
   end
 
   def convert_properties(properties)
@@ -96,16 +104,16 @@ module OpenApi2JsonSchema
   end
 
   def convert_types(schema)
-    if schema['type'] && schema['nullable'] == true
-      type = [schema['type'], 'null']
+    if schema["type"] && schema["nullable"] == true
+      type = [schema["type"], "null"]
 
-      if schema['enum'].is_a?(Array)
+      if schema["enum"].is_a?(Array)
         {
-          'type' => type,
-          'enum' => schema['enum'].append(nil)
+          "type" => type,
+          "enum" => schema["enum"].append(nil)
         }
       else
-        { 'type' => type }
+        { "type" => type }
       end
     else
       {}
@@ -113,29 +121,29 @@ module OpenApi2JsonSchema
   end
 
   def convert_format(schema)
-    case schema['format']
-    when 'int32'
+    case schema["format"]
+    when "int32"
       {
-        'minimum' => [MIN_INT_32, schema['minimum'] || MIN_INT_32].max,
-        'maximum' => [MAX_INT_32, schema['maximum'] || MAX_INT_32].min
+        "minimum" => [MIN_INT_32, schema["minimum"] || MIN_INT_32].max,
+        "maximum" => [MAX_INT_32, schema["maximum"] || MAX_INT_32].min
       }
-    when 'int64'
+    when "int64"
       {
-        'minimum' => [MIN_INT_64, schema['minimum'] || MIN_INT_64].max,
-        'maximum' => [MAX_INT_64, schema['maximum'] || MAX_INT_64].min
+        "minimum" => [MIN_INT_64, schema["minimum"] || MIN_INT_64].max,
+        "maximum" => [MAX_INT_64, schema["maximum"] || MAX_INT_64].min
       }
-    when 'float'
+    when "float"
       {
-        'minimum' => [MIN_FLOAT, schema['minimum'] || MIN_FLOAT].max,
-        'maximum' => [MAX_FLOAT, schema['maximum'] || MAX_FLOAT].min
+        "minimum" => [MIN_FLOAT, schema["minimum"] || MIN_FLOAT].max,
+        "maximum" => [MAX_FLOAT, schema["maximum"] || MAX_FLOAT].min
       }
-    when 'double'
+    when "double"
       {
-        'minimum' => [MIN_DOUBLE, schema['minimum'] || MIN_DOUBLE].max,
-        'maximum' => [MAX_DOUBLE, schema['maximum'] || MAX_DOUBLE].min
+        "minimum" => [MIN_DOUBLE, schema["minimum"] || MIN_DOUBLE].max,
+        "maximum" => [MAX_DOUBLE, schema["maximum"] || MAX_DOUBLE].min
       }
-    when 'byte'
-      { 'pattern' => BYTE_PATTERN }
+    when "byte"
+      { "pattern" => BYTE_PATTERN }
     else
       {}
     end
