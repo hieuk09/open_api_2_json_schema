@@ -1,0 +1,24 @@
+schema:
+  allOf:
+    - $ref: 'spec/fixtures/father.yml#/schema'
+    - type: object
+      required:
+        - login_details
+      properties:
+        login_details:
+          type: object
+          required:
+            - star_alliance_id
+            - password
+            - password_confirmation
+          properties:
+            star_alliance_id:
+              type: string
+              pattern: ^[0-9]{10}$
+              format: id
+            password:
+              type: string
+              format: password
+            password_confirmation:
+              type: string
+              format: password
