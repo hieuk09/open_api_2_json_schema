@@ -1,0 +1,46 @@
+schema:
+  type: object
+  required:
+    - personal_details
+    - login_details
+    - agreements
+  properties:
+    personal_details:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        birthdate:
+          type: string
+          format: date
+        email:
+          type: string
+          format: email
+        email_confirmation:
+          type: string
+          format: email
+      required:
+        - first_name
+        - last_name
+        - birthdate
+        - email
+        - email_confirmation
+    login_details:
+      type: object
+      properties:
+        star_alliance_id:
+          type: string
+          pattern: ^[0-9]{10}$
+          format: id
+      required:
+        - star_alliance_id
+    agreements:
+      type: object
+      required:
+        - terms
+      properties:
+        terms:
+          type: boolean
+          x-display-type: checkbox

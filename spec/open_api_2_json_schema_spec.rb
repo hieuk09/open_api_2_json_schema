@@ -6,12 +6,24 @@ RSpec.describe OpenApi2JsonSchema do
   end
 
   describe '.convert_from_file' do
-    let(:path) { 'spec/fixtures/open_api.yml' }
     subject { described_class.convert_from_file(path) }
 
-    it 'converts data correctly' do
-      expected_data = JSON.parse(File.read('spec/fixtures/json_schema.json'))
-      expect(JSON.parse(subject)).to eq expected_data
+    context 'when dealing with normal schema' do
+      let(:path) { 'spec/fixtures/open_api.yml' }
+
+      it 'converts data correctly' do
+        expected_data = JSON.parse(File.read('spec/fixtures/json_schema.json'))
+        expect(JSON.parse(subject)).to eq expected_data
+      end
+    end
+
+    context 'when dealing with schema inheritance' do
+      let(:path) { 'spec/fixtures/child.yml' }
+
+      it 'converts data correctly' do
+        expected_data = JSON.parse(File.read('spec/fixtures/inherited_json_schema.json'))
+        expect(JSON.parse(subject)).to eq expected_data
+      end
     end
   end
 

@@ -3,11 +3,12 @@
 require 'json'
 require 'yaml'
 require_relative "open_api_2_json_schema/version"
+require_relative 'attribute_handlers/all_of'
 
 module OpenApi2JsonSchema
   module_function
 
-  STRUCTS = ['allOf', 'anyOf', 'oneOf', 'not', 'items', 'additionalProperties']
+  STRUCTS = ['allOf', 'anyOf', 'oneOf', 'not', 'items', 'additionalProperties', 'schema']
   NOT_SUPPORTED = [
     'nullable', 'discriminator', 'readOnly',
     'writeOnly', 'xml', 'externalDocs',
@@ -47,11 +48,15 @@ module OpenApi2JsonSchema
   def convert_schema(schema)
     json_schema = schema.except(*NOT_SUPPORTED)
 
-    schema.slice(STRUCTS).each do |struct, data|
+    schema.slice(*STRUCTS).each do |struct, data|
       case data
       when Array
-        json_schema[struct] = data.map do |item|
-          convert_schema(item)
+        if struct == 'allOf'
+          json_schema[struct] = AttributeHandlers::AllOf.new.call(data)
+        else
+          json_schema[struct] = data.map do |item|
+            convert_schema(item)
+          end
         end
       when Hash
         json_schema[struct] = convert_schema(data)

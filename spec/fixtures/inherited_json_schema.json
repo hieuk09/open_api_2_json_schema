@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "schema": {
+    "allOf": [
+      {
+        "properties": {
+          "agreements": {
+            "properties": {
+              "terms": {
+                "type": "boolean",
+                "x-display-type": "checkbox"
+              }
+            },
+            "required": [
+              "terms"
+            ],
+            "type": "object"
+          },
+          "login_details": {
+            "properties": {
+              "star_alliance_id": {
+                "format": "id",
+                "pattern": "^[0-9]{10}$",
+                "type": "string"
+              }
+            },
+            "required": [
+              "star_alliance_id"
+            ],
+            "type": "object"
+          },
+          "personal_details": {
+            "properties": {
+              "birthdate": {
+                "format": "date",
+                "type": "string"
+              },
+              "email": {
+                "format": "email",
+                "type": "string"
+              },
+              "email_confirmation": {
+                "format": "email",
+                "type": "string"
+              },
+              "first_name": {
+                "type": "string"
+              },
+              "last_name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "first_name",
+              "last_name",
+              "birthdate",
+              "email",
+              "email_confirmation"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "personal_details",
+          "login_details",
+          "agreements"
+        ],
+        "type": "object"
+      },
+      {
+        "properties": {
+          "login_details": {
+            "properties": {
+              "password": {
+                "format": "password",
+                "type": "string"
+              },
+              "password_confirmation": {
+                "format": "password",
+                "type": "string"
+              },
+              "star_alliance_id": {
+                "format": "id",
+                "pattern": "^[0-9]{10}$",
+                "type": "string"
+              }
+            },
+            "required": [
+              "star_alliance_id",
+              "password",
+              "password_confirmation"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "login_details"
+        ],
+        "type": "object"
+      }
+    ]
+  }
+}
