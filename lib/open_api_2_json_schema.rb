@@ -60,7 +60,11 @@ module OpenApi2JsonSchema
           end
         end
       when Hash
-        json_schema[struct] = convert_schema(data)
+        if struct == 'discriminator'
+          json_schema[struct] = AttributeHandlers::Discriminator.new.call(data)
+        else
+          json_schema[struct] = convert_schema(data)
+        end
       else
         # ignore
       end

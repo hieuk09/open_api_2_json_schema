@@ -8,13 +8,6 @@ RSpec.describe OpenApi2JsonSchema::AttributeHandlers::Discriminator do
 
       it { expect { subject }.to raise_error('discriminator schema must be a Hash') }
     end
-
-    context 'when schema is not a Hash' do
-      let(:discriminator_schema) { {} }
-
-      it { expect { subject }.to raise_error('discriminator schema must contain mapping') }
-    end
-
   end
 
   context "when schema is valid" do

@@ -1,0 +1,51 @@
+{
+  "schema": {
+    "discriminator": {
+      "propertyName": "key",
+      "mapping": {
+        "value1": {
+          "schema": {
+            "type": "object",
+            "required": ["data"],
+            "properties": {
+              "data": {
+                "type": "object",
+                "required": ["example_one"],
+                "properties": {
+                  "example_one": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "value2": {
+          "schema": {
+            "type": "object",
+            "required": ["data"],
+            "properties": {
+              "data": {
+                "type": "object",
+                "required": ["example_two"],
+                "properties": {
+                  "example_two": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "properties": {
+      "key": {
+        "type": "string",
+        "enum": ["value1", "value2"]
+      }
+    }
+  },
+  "$schema": "http://json-schema.org/draft-04/schema#"
+}
