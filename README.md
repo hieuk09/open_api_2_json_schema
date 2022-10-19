@@ -34,6 +34,46 @@ schema = {
 OpenApi2JsonSchema.convert(schema)
 ```
 
+### Discriminator
+
+```yaml
+# Sample YAML file
+schema:
+  discriminator:
+    propertyName: key
+    mapping:
+      value1: 'path-to-file-2.yml'
+      value2: 'path-to-file-2.yml'
+  properties:
+    key:
+      type: string
+      enum:
+        - value1
+        - value2
+```
+
+```json
+"schema": {
+  "properties": {
+    "key": {
+      "type": "string",
+      "enum": ["value1", "value2"]
+    }
+  },
+  "discriminator": {
+    "propertyName": "name",
+    "mapping": {
+      "value1": {
+        "type": "object"
+      },
+      "value2": {
+        "type": "array"
+      }
+    }
+  }
+}
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

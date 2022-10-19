@@ -1,0 +1,12 @@
+schema:
+  discriminator:
+    propertyName: key
+    mapping:
+      value1: 'spec/fixtures/mapping-value-one.yml'
+      value2: 'spec/fixtures/mapping-value-two.yml'
+  properties:
+    key:
+      type: string
+      enum:
+        - value1
+        - value2

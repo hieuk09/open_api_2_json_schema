@@ -25,6 +25,15 @@ RSpec.describe OpenApi2JsonSchema do
         expect(JSON.parse(subject)).to eq expected_data
       end
     end
+
+    context 'when dealing with schema containing discriminator' do
+      let(:path) { 'spec/fixtures/discriminator.yml' }
+
+      it 'converts data correctly' do
+        expected_data = JSON.parse(File.read('spec/fixtures/discriminator_json_schema.json'))
+        expect(JSON.parse(subject)).to eq expected_data
+      end
+    end
   end
 
   describe '.convert' do

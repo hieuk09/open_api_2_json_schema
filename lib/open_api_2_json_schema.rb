@@ -4,13 +4,14 @@ require 'json'
 require 'yaml'
 require_relative "open_api_2_json_schema/version"
 require_relative 'attribute_handlers/all_of'
+require_relative 'attribute_handlers/discriminator'
 
 module OpenApi2JsonSchema
   module_function
 
-  STRUCTS = ['allOf', 'anyOf', 'oneOf', 'not', 'items', 'additionalProperties', 'schema']
+  STRUCTS = ['allOf', 'anyOf', 'oneOf', 'not', 'items', 'additionalProperties', 'schema', 'discriminator']
   NOT_SUPPORTED = [
-    'nullable', 'discriminator', 'readOnly',
+    'nullable', 'readOnly',
     'writeOnly', 'xml', 'externalDocs',
     'example', 'deprecated'
   ]
@@ -59,7 +60,11 @@ module OpenApi2JsonSchema
           end
         end
       when Hash
-        json_schema[struct] = convert_schema(data)
+        if struct == 'discriminator'
+          json_schema[struct] = AttributeHandlers::Discriminator.new.call(data)
+        else
+          json_schema[struct] = convert_schema(data)
+        end
       else
         # ignore
       end

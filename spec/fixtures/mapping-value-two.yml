@@ -1,0 +1,12 @@
+schema:
+  type: object
+  required:
+    - data
+  properties:
+    data:
+      type: object
+      required:
+        - example_two
+      properties:
+        example_two:
+          type: string
