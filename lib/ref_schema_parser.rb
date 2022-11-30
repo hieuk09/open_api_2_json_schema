@@ -1,9 +1,10 @@
 require "yaml"
+require_relative "./utils/uri_normalizer"
 
 module OpenApi2JsonSchema
   class RefSchemaParser
-    def call(ref_path)
-      file_path, fragments = normalize_path(ref_path)
+    def call(ref_path, base_path = nil)
+      file_path, fragments = normalize_path(ref_path, base_path)
       ref_schema = load_file(file_path)
       fragment_schema = ref_schema
 
@@ -18,8 +19,13 @@ module OpenApi2JsonSchema
 
     private
 
-    def normalize_path(path)
-      temp_path = path.split("#")
+    def normalize_path(path, base_path)
+      normalized_ref_path = if base_path && base_path != ""
+                              Utils::URINormalizer.normalize_ref(path, base_path).to_s
+                            else
+                              path
+                            end
+      temp_path = normalized_ref_path.split("#")
       raise "Invalid reference path" if temp_path.size > 2
 
       temp_path

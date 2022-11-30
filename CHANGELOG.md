@@ -1,3 +1,7 @@
+## [0.1.3] - 2022-11-30
+
+- Support relative `$ref` in `YamlToValidation`
+
 ## [0.1.2] - 2022-10-19
 
 - Support `discriminator`
