@@ -51,7 +51,7 @@ RSpec.describe OpenApi2JsonSchema::AttributeHandlers::AllOf do
 
     before do
       expect(OpenApi2JsonSchema::RefSchemaParser).to receive_message_chain(:new, :call)
-        .with("/path-to-file#/schema")
+        .with("/path-to-file#/schema", "")
         .and_return({ "type" => "object" })
     end
 

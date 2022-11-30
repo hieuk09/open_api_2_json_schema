@@ -1,3 +1,5 @@
+# This is copied from voxpupuli/json-schema
+require "addressable/uri"
 module Utils
   module URINormalizer
     def self.normalize_ref(ref, base)
