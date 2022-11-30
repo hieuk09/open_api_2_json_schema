@@ -1,4 +1,4 @@
-require 'yaml'
+require "yaml"
 
 module OpenApi2JsonSchema
   class RefSchemaParser
@@ -8,10 +8,8 @@ module OpenApi2JsonSchema
       fragment_schema = ref_schema
 
       if fragments
-        fragments.split('/').each do |fragment|
-          if fragment && fragment != '' && fragment_schema[fragment]
-            fragment_schema = fragment_schema[fragment]
-          end
+        fragments.split("/").each do |fragment|
+          fragment_schema = fragment_schema[fragment] if fragment && fragment != "" && fragment_schema[fragment]
         end
       end
 
@@ -21,8 +19,8 @@ module OpenApi2JsonSchema
     private
 
     def normalize_path(path)
-      temp_path = path.split('#')
-      raise 'Invalid reference path' if temp_path.size > 2
+      temp_path = path.split("#")
+      raise "Invalid reference path" if temp_path.size > 2
 
       temp_path
     end

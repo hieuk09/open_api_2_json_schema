@@ -1,12 +1,11 @@
 RSpec.describe OpenApi2JsonSchema::AttributeHandlers::Discriminator do
   subject { described_class.new.call(discriminator_schema) }
 
-  context 'when there is invalid sub-schema' do
-
-    context 'when schema is not a Hash' do
+  context "when there is invalid sub-schema" do
+    context "when schema is not a Hash" do
       let(:discriminator_schema) { [1] }
 
-      it { expect { subject }.to raise_error('discriminator schema must be a Hash') }
+      it { expect { subject }.to raise_error("discriminator schema must be a Hash") }
     end
   end
 
@@ -26,7 +25,7 @@ RSpec.describe OpenApi2JsonSchema::AttributeHandlers::Discriminator do
         "propertyName" => "key",
         "mapping" => {
           "value" => {
-            'type' => "object"
+            "type" => "object"
           }
         }
       }

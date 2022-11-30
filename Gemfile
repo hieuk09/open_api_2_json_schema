@@ -9,6 +9,6 @@ gem "rake", "~> 13.0"
 
 gem "rspec", "~> 3.0"
 
+gem "byebug"
 gem "rubocop", "~> 1.21"
-gem 'super_diff'
-gem 'byebug'
+gem "super_diff"
