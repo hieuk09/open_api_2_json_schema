@@ -49,12 +49,28 @@ RSpec.describe OpenApi2JsonSchema::AttributeHandlers::AllOf do
       ]
     end
 
-    before do
-      expect(OpenApi2JsonSchema::RefSchemaParser).to receive_message_chain(:new, :call)
-        .with("/path-to-file#/schema", "")
-        .and_return({ "type" => "object" })
+    context "when base path is provided" do
+      let(:base_path) { "/open_api/path-to-file" }
+
+      subject { described_class.new.call(all_of_schemas, base_path) }
+
+      before do
+        expect(OpenApi2JsonSchema::RefSchemaParser).to receive_message_chain(:new, :call)
+          .with("/path-to-file#/schema", base_path)
+          .and_return({ "type" => "object" })
+      end
+
+      it { expect(subject).to eq(expected_result) }
     end
 
-    it { expect(subject).to eq(expected_result) }
+    context "when base path is not provided" do
+      before do
+        expect(OpenApi2JsonSchema::RefSchemaParser).to receive_message_chain(:new, :call)
+          .with("/path-to-file#/schema", "")
+          .and_return({ "type" => "object" })
+      end
+
+      it { expect(subject).to eq(expected_result) }
+    end
   end
 end
