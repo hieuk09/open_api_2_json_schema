@@ -2,10 +2,8 @@
 
 require 'json'
 require 'yaml'
+require 'oas_parser'
 require_relative "open_api_2_json_schema/version"
-require_relative 'attribute_handlers/all_of'
-require_relative 'attribute_handlers/discriminator'
-
 module OpenApi2JsonSchema
   module_function
 
@@ -36,8 +34,7 @@ module OpenApi2JsonSchema
   end
 
   def convert_from_file(path)
-    data = File.read(path)
-    convert(YAML.load(data))
+    convert(OasParser::Definition.resolve(path).raw)
   end
 
   def convert(schema)
@@ -48,27 +45,6 @@ module OpenApi2JsonSchema
 
   def convert_schema(schema)
     json_schema = schema.except(*NOT_SUPPORTED)
-
-    schema.slice(*STRUCTS).each do |struct, data|
-      case data
-      when Array
-        if struct == 'allOf'
-          json_schema[struct] = AttributeHandlers::AllOf.new.call(data)
-        else
-          json_schema[struct] = data.map do |item|
-            convert_schema(item)
-          end
-        end
-      when Hash
-        if struct == 'discriminator'
-          json_schema[struct] = AttributeHandlers::Discriminator.new.call(data)
-        else
-          json_schema[struct] = convert_schema(data)
-        end
-      else
-        # ignore
-      end
-    end
 
     if schema.key?('properties')
       new_properties = convert_properties(schema['properties'])

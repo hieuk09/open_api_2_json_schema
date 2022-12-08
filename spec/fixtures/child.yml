@@ -1,6 +1,6 @@
 schema:
   allOf:
-    - $ref: 'spec/fixtures/father.yml#/schema'
+    - $ref: 'father.yml#/schema'
     - type: object
       required:
         - login_details
