@@ -1,3 +1,7 @@
+## [0.2.0] - 2022-12-21
+
+- Parsing & deferencing ref using `oas_parser`
+
 ## [0.1.2] - 2022-10-19
 
 - Support `discriminator`
